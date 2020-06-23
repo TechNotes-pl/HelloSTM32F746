@@ -16,13 +16,20 @@
 extern "C" {
 #endif
 
-/* ----------------------- Defines ------------------------------------------*/
+/* -------------- Modbus registers configuration ------------------------*/
+
 #define REG_INPUT_START 1000
 #define REG_INPUT_NREGS 4
 
-/* ----------------------- Static variables ---------------------------------*/
 static USHORT   usRegInputStart = REG_INPUT_START;
-static USHORT   usRegInputBuf[REG_INPUT_NREGS];/* USER CODE BEGIN Header */
+static USHORT   usRegInputBuf[REG_INPUT_NREGS];
+
+
+
+/**
+  * Refresh Modbus registers values
+  */
+void ModbusRegsRefresh(void);
 
 /**
   * @brief ModBus register input callback

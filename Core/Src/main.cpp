@@ -9,40 +9,57 @@
 #include "modbus_registers.h"
 #include "UserButton.h"
 
-int main(void)
-{
-  // Reset of all peripherals, initializes the Flash interface and the Systick.
-  HAL_Init();
+int ModbusInitialize(void);
 
-  // Configure the system clock
-  SystemClock_Config();
+int main(void) {
+	// Reset of all peripherals, initializes the Flash interface and the Systick.
+	HAL_Init();
 
-  Led led;
-  UserButton btn;
+	// Configure the system clock
+	SystemClock_Config();
 
-  const int DelayTimeHigh = 2000;
-  const int DelayTimeLow = 50;
-  int delay_time = DelayTimeHigh;
+	Led led;
+	UserButton btn;
 
-/*
-  eStatus = eMBInit( MB_RTU, 0x0A, 0, 38400, MB_PAR_EVEN );
+	const int DelayTimeHigh = 1000;
+	const int DelayTimeLow = 100;
+	int delay_time = DelayTimeHigh;
 
-  // Enable the Modbus Protocol Stack.
-  eStatus = eMBEnable(  );
-*/
-  for( ;; )
-  {
-/*
-	  ( void )eMBPoll(  );
+	bool modbus_ready = ModbusInitialize();
 
-	 // Here we simply count the number of poll cycles.
-	 usRegInputBuf[0]++;
-*/
+	for (;;) {
+		if (modbus_ready) {
+			// Handle Modbus messages if any
+			(void) eMBPoll();
+			ModbusRegsRefresh();
+		}
 
-    if (btn.IsPressed())
-      delay_time = (delay_time == DelayTimeLow) ? DelayTimeHigh : DelayTimeLow;
+		// Switch delay time to short or long if user button pressed.
+		if (btn.IsPressed()) {
+			delay_time =
+					(delay_time == DelayTimeLow) ? DelayTimeHigh : DelayTimeLow;
+		}
 
-    led.Toggle();
-    HAL_Delay(delay_time);
-  }
+		led.Toggle();
+		HAL_Delay(delay_time);
+	}
+}
+
+/**
+ * Initialize RTU mode
+ * Returns 0 if everything is OK
+ */
+int ModbusInitialize(void) {
+	eMBErrorCode eStatus;
+
+	const UCHAR slave_address = 0x0A;
+	const UCHAR port = 0;
+	const ULONG baud_rate = 38400;
+
+	if ((eStatus = eMBInit(MB_RTU, slave_address, port, baud_rate, MB_PAR_EVEN))
+			!= MB_ENOERR)
+		return eStatus;
+
+	// Enable the Modbus Protocol Stack.
+	return eMBEnable();
 }

@@ -7,6 +7,16 @@
 
 #include "modbus_registers.h"
 
+/**
+ * Update Modbus registers
+ */
+void ModbusRegsRefresh() {
+	// Here we simply count the number of poll cycles.
+	usRegInputBuf[0]++;
+}
+
+
+
 eMBErrorCode
 eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
 {
