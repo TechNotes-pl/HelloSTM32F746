@@ -1,13 +1,12 @@
 /*
- * UserButton.cpp
+ *  UserButton.cpp
+ *  Example of GPIO configuration, do not use in production environment.
  *
  *  Created on: Jun 23, 2020
  *      Author: Technotes-pl
  */
 
 #include "UserButton.h"
-
-//namespace Technotes {
 
 UserButton::UserButton() {
 	Setup();
@@ -22,5 +21,3 @@ void UserButton::Setup() {
 			GPIO_SPEED_FREQ_LOW, 0 };
 	HAL_GPIO_Init(GPIOI, &gpio);
 }
-
-//} /* namespace Technotes */

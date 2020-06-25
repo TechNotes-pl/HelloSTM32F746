@@ -62,6 +62,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define MY_PERIOD_MS 1000
 #define UBP11_Pin GPIO_PIN_11
 #define UBP11_GPIO_Port GPIOI
 #define UBP11_EXTI_IRQn EXTI15_10_IRQn
