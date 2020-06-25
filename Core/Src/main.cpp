@@ -2,14 +2,22 @@
  * FreeModbus Libary: STM32F746 Demo Application
  * Copyright (C) 2020 https://TechNotes.pl
  */
-#include "led.h"
+#include "main.h"
+#include "mbedtls.h"
+#include "gpio.h"
 #include "system_clock.h"
 #include "mb.h"
 #include "mbport.h"
 #include "modbus_registers.h"
+#include "led.h"
 #include "UserButton.h"
 
 int ModbusInitialize(void);
+
+// LED blink delay times
+const int DelayTimeHigh = 1000;
+const int DelayTimeLow = 100;
+int delay_time = DelayTimeHigh;
 
 int main(void) {
 	// Reset of all peripherals, initializes the Flash interface and the Systick.
@@ -18,12 +26,11 @@ int main(void) {
 	// Configure the system clock
 	SystemClock_Config();
 
-	Led led;
-	UserButton btn;
+	// Initialize all configured peripherals
+	MX_GPIO_Init();
+	MX_MBEDTLS_Init();
 
-	const int DelayTimeHigh = 1000;
-	const int DelayTimeLow = 100;
-	int delay_time = DelayTimeHigh;
+	Led led;
 
 	bool modbus_ready = ModbusInitialize();
 
@@ -34,16 +41,20 @@ int main(void) {
 			ModbusRegsRefresh();
 		}
 
-		// Switch delay time to short or long if user button pressed.
-		if (btn.IsPressed()) {
-			delay_time =
-					(delay_time == DelayTimeLow) ? DelayTimeHigh : DelayTimeLow;
-		}
-
+		// Led blink
 		led.Toggle();
 		HAL_Delay(delay_time);
 	}
 }
+
+/**
+  * User button press callback function: switch led blink time.
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	delay_time = (delay_time == DelayTimeLow) ? DelayTimeHigh : DelayTimeLow;
+}
+
 
 /**
  * Initialize RTU mode

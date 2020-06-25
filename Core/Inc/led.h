@@ -1,5 +1,6 @@
 /*
  * led.h
+ * Example of GPIO configuration, do not use in production environment.
  *
  *  Created on: Jun 22, 2020
  *      Author: Technotes-pl
