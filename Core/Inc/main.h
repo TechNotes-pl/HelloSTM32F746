@@ -29,13 +29,10 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
+#include "stm32f7xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-#define UBP11_Pin 			GPIO_PIN_11
-#define UBP11_GPIO_Port 	GPIOI
-#define UBP11_EXTI_IRQn 	EXTI15_10_IRQn
 
 /* USER CODE END Includes */
 
@@ -63,6 +60,8 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define MY_PERIOD_MS 1000
+#define LED1_Pin GPIO_PIN_1
+#define LED1_GPIO_Port GPIOI
 #define UBP11_Pin GPIO_PIN_11
 #define UBP11_GPIO_Port GPIOI
 #define UBP11_EXTI_IRQn EXTI15_10_IRQn

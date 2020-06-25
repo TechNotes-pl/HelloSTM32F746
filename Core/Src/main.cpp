@@ -28,15 +28,10 @@ int main(void) {
 	MX_TIM7_Init();
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	// Initialize LED1 - TODO: move to gpio.c
-	__HAL_RCC_GPIOI_CLK_ENABLE();
-	GPIO_InitTypeDef gpio = { GPIO_PIN_1, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW, 0 };
-	HAL_GPIO_Init(GPIOI, &gpio);
-
+	// Handle Modbus messages if any
 	bool modbus_ready = ModbusInitialize();
 	for (;;) {
 		if (modbus_ready) {
-			// Handle Modbus messages if any
 			(void) eMBPoll();
 			ModbusRegsRefresh();
 		}
